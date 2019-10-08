@@ -1,16 +1,18 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http'
 
 import { allBooks, allReaders } from 'app/data';
-import { Reader } from "app/models/reader";
-import { Book } from "app/models/book";
+import { Reader } from 'app/models/reader';
+import { Book } from 'app/models/book';
 import { BookTrackerError } from 'app/models/bookTrackerError';
 
 @Injectable()
 export class DataService {
-
-  constructor() { }
-
   mostPopularBook: Book = allBooks[0];
+
+  constructor(
+    private http: HttpClient
+  ) { }
 
   setMostPopularBook(popularBook: Book): void {
     this.mostPopularBook = popularBook;
