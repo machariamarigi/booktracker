@@ -6,7 +6,7 @@
           <h3 class="panel-title">All Books</h3>
         </div>
         <div class="panel-body">
-        <li *ngFor='let book of allBooks'>
+        <li *ngFor='let book of (allBooks | async)'>
           <i>{{book.title}}</i>
           <a [routerLink]="['/editbook', book.bookID]"> Edit </a>
           <a (click)="deleteBook(book.bookID)">Delete</a>

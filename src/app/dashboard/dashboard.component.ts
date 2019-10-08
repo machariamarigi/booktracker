@@ -13,7 +13,7 @@ import { DataService } from 'app/core/data.service';
 })
 export class DashboardComponent implements OnInit {
 
-  allBooks: Book[];
+  allBooks: Observable<Book[]>;
   allReaders: Reader[];
   mostPopularBook: Book;
 

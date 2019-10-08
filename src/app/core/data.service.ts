@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
+import { Observable } from 'rxjs';
 
 import { allBooks, allReaders } from 'app/data';
 import { Reader } from 'app/models/reader';
@@ -26,8 +27,8 @@ export class DataService {
     return allReaders.find(reader => reader.readerID === id);
   }
 
-  getAllBooks(): Book[] {
-    return allBooks;
+  getAllBooks(): Observable<Book[]> {
+    return this.http.get<Book[]>('/api/books')
   }
 
   getBookById(id: number): Book {
