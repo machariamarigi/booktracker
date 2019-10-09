@@ -28,10 +28,10 @@ export class DataService {
   }
 
   getAllBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>('/api/books')
+    return this.http.get<Book[]>('/api/books');
   }
 
-  getBookById(id: number): Book {
-    return allBooks.find(book => book.bookID === id);
-  }  
+  getBookById(id: number): Observable<Book> {
+    return this.http.get<Book>(`/api/books/${id}`);
+  }
 }
