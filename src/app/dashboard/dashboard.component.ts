@@ -13,15 +13,18 @@ import { DataService } from 'app/core/data.service';
 })
 export class DashboardComponent implements OnInit {
 
-  allBooks: Observable<Book[]>;
+  allBooks: Book[];
   allReaders: Reader[];
   mostPopularBook: Book;
 
   constructor(private dataService: DataService,
               private title: Title) { }
-  
+
   ngOnInit() {
-    this.allBooks = this.dataService.getAllBooks();
+    this.dataService.getAllBooks().subscribe(
+      (books: Book[]) => this.allBooks = books,
+      (err: any) => console.log(err)
+    );
     this.allReaders = this.dataService.getAllReaders();
     this.mostPopularBook = this.dataService.mostPopularBook;
 
@@ -29,7 +32,14 @@ export class DashboardComponent implements OnInit {
   }
 
   deleteBook(bookID: number): void {
-    console.warn(`Delete book not yet implemented (bookID: ${bookID}).`);
+    this.dataService.deleteBook(bookID)
+      .subscribe(
+        (data: void) => {
+          const index: number = this.allBooks.findIndex(book => book.bookID === bookID)
+          this.allBooks.splice(index, 1)
+        },
+        (err: any) => console.log(err)
+      );
   }
 
   deleteReader(readerID: number): void {

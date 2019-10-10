@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
+import { HttpClient, HttpHeaders } from '@angular/common/http'
 import { Observable } from 'rxjs';
 
 import { allBooks, allReaders } from 'app/data';
@@ -33,5 +33,25 @@ export class DataService {
 
   getBookById(id: number): Observable<Book> {
     return this.http.get<Book>(`/api/books/${id}`);
+  }
+
+  addBook(newBook: Book): Observable<Book> {
+    return this.http.post<Book>('/api/books', newBook, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    });
+  }
+
+  updatedBook(updatedBook: Book): Observable<void> {
+    return this.http.put<void>(`/api/books/${updatedBook.bookID}`, updatedBook, {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+      })
+    });
+  }
+
+  deleteBook(bookId: number): Observable<void> {
+    return this.http.delete<void>(`/api/books/${bookId}`);
   }
 }
