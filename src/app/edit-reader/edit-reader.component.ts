@@ -31,6 +31,10 @@ export class EditReaderComponent implements OnInit {
   }
 
   saveChanges() {
-    console.warn('Save reader not yet implemented.');
+    this.dataService.updateReader(this.selectedReader)
+      .subscribe(
+        (data: void) => console.log(`${this.selectedReader.name} updated succesfully`),
+        (err: any) => console.log(err)
+      );
   }
 }
