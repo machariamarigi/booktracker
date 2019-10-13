@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http'
-import { Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http'
+import { Observable, throwError } from 'rxjs';
+import { catchError } from 'rxjs/operators';
 
 import { allBooks, allReaders } from 'app/data';
 import { Reader } from 'app/models/reader';
@@ -23,8 +24,10 @@ export class DataService {
     return this.http.get<Reader[]>('/api/readers')
   }
 
-  getAllBooks(): Observable<Book[]> {
-    return this.http.get<Book[]>('/api/books');
+  getAllBooks(): Observable<Book[] | BookTrackerError> {
+    return this.http.get<Book[]>('/api/books').pipe(
+      catchError(err => this.handleHttpError(err))
+    )
   }
 
   getReaderById(id: number): Observable<Reader> {
@@ -73,5 +76,15 @@ export class DataService {
 
   deleteBook(bookId: number): Observable<void> {
     return this.http.delete<void>(`/api/books/${bookId}`);
+  }
+
+  private handleHttpError(error: HttpErrorResponse): Observable<BookTrackerError> {
+    const dataError = new BookTrackerError();
+
+    dataError.errorNumber = 100;
+    dataError.message = error.statusText;
+    dataError.friendlyMessage = 'An error occurred retrieving data';
+
+    return throwError(dataError);
   }
 }
